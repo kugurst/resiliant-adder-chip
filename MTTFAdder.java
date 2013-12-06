@@ -22,7 +22,8 @@ public class MTTFAdder
 				{
 					int worker = workerNum.getAndIncrement();
 					for (int i = 0; i < simulCount; i++) {
-						Adder a = new Adder(active, spares, lambda, Q);
+						Adder a =
+							new Adder(active, spares, lambda, 86400.0, Q, Math.pow(10.0, -9.0));
 						while (!a.hasFailed());
 						timeArr[worker][i] = a.getTimeOfDeath();
 					}

@@ -11,8 +11,11 @@ public class Adder
 	 * @param spares
 	 * @param baseLambda
 	 * @param p
-	 * @param Q */
-	public Adder(int active, int spares, double baseLambda, double Q)
+	 * @param Q
+	 * @param d
+	 * @param e */
+	public Adder(int active, int spares, double baseLambda, double lambdaSeconds, double Q,
+		double Qseconds)
 	{
 		cores = new AdderCore[active + spares];
 		for (int i = 0; i < cores.length; i++)
