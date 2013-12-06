@@ -3,15 +3,16 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class MTTFCores
 {
 	public static double	LAMBDA	= 0.05;
+	public double			average;
 
 	public MTTFCores(final int type)
 	{
 		int cores = Runtime.getRuntime().availableProcessors();
-		final int simulCount = (int) Math.round(1000 / (double) cores);
+		final int simulCount = (int) Math.round(1025 / (double) cores);
 		final double timeArr[][] = new double[cores][simulCount];
 		final double timeSum[] = new double[cores];
-		final int spares = 14;
-		final int active = 7;
+		final int spares = 512;
+		final int active = 16;
 		final double resolution = 2;
 		Thread workers[] = new Thread[cores];
 		final AtomicInteger workerNum = new AtomicInteger(0);
@@ -43,14 +44,28 @@ public class MTTFCores
 		double totalSum = 0;
 		for (double timeTotal : timeSum)
 			totalSum += timeTotal;
-		System.out.println("Average time: " + (totalSum / (cores * simulCount)));
+		average = (totalSum / (cores * simulCount));
+		System.out.println("Average time: " + average);
 	}
 
 	public static void main(String[] args)
 	{
 		long start = System.currentTimeMillis();
-		for (int i = 0; i < 3; i++)
-			new MTTFCores(i + 1);
+		double constant = -1;
+		double floor = -1;
+		double rest = -1;
+		for (int i = 0; i < 3; i++) {
+			MTTFCores cores = new MTTFCores(i + 1);
+			if (constant == -1)
+				constant = cores.average;
+			else if (floor == -1)
+				floor = cores.average;
+			else if (rest == -1)
+				rest = cores.average;
+		}
+		System.out.println(constant / floor);
+		System.out.println(constant / rest);
+		System.out.println(rest / floor);
 		System.out.println("Time taken: "
 			+ ((System.currentTimeMillis() - start) / Math.pow(10.0, 3)) + "s");
 	}

@@ -48,7 +48,7 @@ public class MultiCore implements Chip
 						activateCount--;
 					}
 					// Deactivate this core and attempt to activate the next one
-					else if (cores[i].isActive()) {
+					else if (cores[i].isActive() && cores[i].shouldRest()) {
 						wasActivated[i] = true;
 						cores[i].rest();
 						activateCount++;

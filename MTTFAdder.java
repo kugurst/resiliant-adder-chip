@@ -6,7 +6,7 @@ public class MTTFAdder
 	public MTTFAdder(final int P)
 	{
 		int cores = Runtime.getRuntime().availableProcessors();
-		final int simulCount = (int) Math.round(10000 / (double) cores);
+		final int simulCount = (int) Math.round(1000 / (double) cores);
 		final double timeArr[][] = new double[cores][simulCount];
 		final double timeSum[] = new double[cores];
 		final int spares = 16;

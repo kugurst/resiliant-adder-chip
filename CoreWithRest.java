@@ -1,12 +1,17 @@
 public class CoreWithRest implements Core
 {
-	private boolean	failed	= false;
-	private boolean	resting	= true;
-	private double	lambda;
-	private double	baseLambda;
-	private double	elapsedT;
-	private int		prevEpochs;
-	private double	epsilon	= 1E-5;
+	public static final int	ACTIVE		= 1;
+	public static final int	RESTING		= 2;
+
+	private boolean			failed		= false;
+	private boolean			resting		= true;
+	private double			lambda;
+	private double			baseLambda;
+	private double			elapsedT;
+	private int				prevEpochs;
+	private double			epsilon		= 1E-5;
+	private int				lastState	= RESTING;
+	private int				nextState;
 
 	public CoreWithRest(double lambda)
 	{
@@ -18,6 +23,11 @@ public class CoreWithRest implements Core
 	{
 		if (failed)
 			return;
+		if (lastState != nextState) {
+			elapsedT = 0;
+			prevEpochs = 0;
+			lastState = nextState;
+		}
 		elapsedT += t;
 		if (resting) {
 			int elapsedEpochs = (int) Math.floor(elapsedT * baseLambda);
@@ -43,8 +53,7 @@ public class CoreWithRest implements Core
 		if (failed)
 			return;
 		resting = true;
-		elapsedT = 0;
-		prevEpochs = 0;
+		nextState = RESTING;
 	}
 
 	public void activate()
@@ -52,8 +61,7 @@ public class CoreWithRest implements Core
 		if (failed)
 			return;
 		resting = false;
-		elapsedT = 0;
-		prevEpochs = 0;
+		nextState = ACTIVE;
 	}
 
 	public boolean isActive()
@@ -83,5 +91,12 @@ public class CoreWithRest implements Core
 	public void setLambda(double lam)
 	{
 		lambda = lam;
+	}
+
+	@Override
+	public boolean shouldRest()
+	{
+		if (lambda >= 2 * baseLambda) { return true; }
+		return false;
 	}
 }

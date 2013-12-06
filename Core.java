@@ -13,4 +13,6 @@ public interface Core
 	public boolean hasNotFailed();
 
 	public boolean justFailed(double t);
+
+	public boolean shouldRest();
 }

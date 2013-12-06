@@ -51,4 +51,10 @@ public class CoreConstant implements Core
 	{
 		lambda = lam;
 	}
+
+	@Override
+	public boolean shouldRest()
+	{
+		return false;
+	}
 }

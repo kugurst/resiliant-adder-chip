@@ -32,7 +32,7 @@ public class Adder
 	private double pickStep(int clockPeriod, double secondsPerPeriod, double meanLambda,
 		double secondsPerLambda)
 	{
-		double mean = 0.01;// meanLambda * Math.pow(10.0, -1) / 2.0;
+		double mean = 0.001;// meanLambda * Math.pow(10.0, -1) / 2.0;
 		// System.out.println(mean);
 		return mean;
 	}
@@ -46,8 +46,8 @@ public class Adder
 		boolean wasActivate[] = new boolean[cores.length];
 		for (int i = 0; i < cores.length; i++) {
 			if (cores[i].hasNotFailed()) {
+				cores[i].update(timeStep, P);
 				if (!cores[i].justFailed(timeStep)) {
-					cores[i].update(timeStep, P);
 					remaining++;
 					// We should activate if we need to
 					if (activateCount > 0 && !cores[i].isActive()) {

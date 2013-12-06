@@ -69,4 +69,10 @@ public class CoreNoRest implements Core
 	{
 		lambda = lam;
 	}
+
+	@Override
+	public boolean shouldRest()
+	{
+		return false;
+	}
 }
