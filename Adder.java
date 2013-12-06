@@ -75,4 +75,10 @@ public class Adder
 		return failed;
 	}
 
+	public double getTimeOfDeath()
+	{
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }
