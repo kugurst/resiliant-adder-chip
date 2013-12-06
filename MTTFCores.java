@@ -10,7 +10,7 @@ public class MTTFCores
 		final int simulCount = (int) Math.round(10000 / (double) cores);
 		final double timeArr[][] = new double[cores][simulCount];
 		final double timeSum[] = new double[cores];
-		final int spares = 32;
+		final int spares = 31;
 		final int active = 1;
 		final double resolution = 1;
 		Thread workers[] = new Thread[cores];

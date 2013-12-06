@@ -53,7 +53,7 @@ public class MultiCore implements Chip
 					activateCount++;
 				}
 			} else {
-				// Attempt to activate the next one
+				// Attempt to activate the next one, as this one failed
 				activateCount++;
 				continue;
 			}
