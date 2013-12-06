@@ -6,12 +6,12 @@ public class MTTFAdder
 	public MTTFAdder(final int P)
 	{
 		int cores = Runtime.getRuntime().availableProcessors();
-		final int simulCount = (int) Math.round(128 / (double) cores);
+		final int simulCount = (int) Math.round(10000 / (double) cores);
 		final double timeArr[][] = new double[cores][simulCount];
 		final double timeSum[] = new double[cores];
-		final int spares = 3;
+		final int spares = 16;
 		final int active = 1;
-		final double lambda = 0.05; // 1 / lambda = 20 days
+		final double lambda = 0.005; // 1 / lambda = 20 days
 		final int Q = 10; // ns
 		Thread workers[] = new Thread[cores];
 		final AtomicInteger workerNum = new AtomicInteger(0);

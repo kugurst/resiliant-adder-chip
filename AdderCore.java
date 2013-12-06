@@ -31,7 +31,7 @@ public class AdderCore
 			currentLambda =
 				Math.max(baseLambda, relaxLambda * Math.exp(-k * elapsedTimeInCurrentState));
 		else if (lastState == ACTIVE)
-			currentLambda = baseLambda + p * Math.sqrt(t);
+			currentLambda = baseLambda + p * Math.sqrt(elapsedTimeInCurrentState);
 		if (nextState != lastState) {
 			elapsedTimeInCurrentState = 0;
 			if (nextState == RESTING)
@@ -82,7 +82,7 @@ public class AdderCore
 
 	public boolean shouldDeactivate()
 	{
-		if (currentLambda > 1.2 * baseLambda)
+		if (currentLambda > 1.5 * baseLambda)
 			return true;
 		return false;
 	}

@@ -25,14 +25,14 @@ public class Adder
 			if (activated++ < active)
 				cores[i].activate();
 		}
-		this.timeStep = pickStep(Q, Qseconds, 1.0 / baseLambda, lambdaSeconds);
+		timeStep = pickStep(Q, Qseconds, 1.0 / baseLambda, lambdaSeconds);
 		minimumCores = active;
 	}
 
 	private double pickStep(int clockPeriod, double secondsPerPeriod, double meanLambda,
 		double secondsPerLambda)
 	{
-		double mean = meanLambda * Math.pow(10.0, -1) / 2.0;
+		double mean = 0.01;// meanLambda * Math.pow(10.0, -1) / 2.0;
 		// System.out.println(mean);
 		return mean;
 	}
