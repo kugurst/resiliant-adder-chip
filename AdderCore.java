@@ -1,5 +1,7 @@
 public class AdderCore
 {
+	private boolean	resting;
+	private boolean	failed;
 
 	public AdderCore(double baseLamdba)
 	{
@@ -28,12 +30,6 @@ public class AdderCore
 	{
 		// TODO Auto-generated method stub
 		return false;
-	}
-
-	public void setLambda(double lam)
-	{
-		// TODO Auto-generated method stub
-
 	}
 
 	public boolean hasNotFailed()

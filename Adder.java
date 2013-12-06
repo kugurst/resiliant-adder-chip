@@ -4,6 +4,7 @@ public class Adder
 	private double		timeStep;
 	private boolean		failed;
 	private int			minimumCores;
+	private double		elapsedTime;
 
 	/** Constructs a new adder with the given parameters. Q should be the same unit as t. That is, if
 	 * Q = t = 1, and Q is of unit seconds, then t is of unit seconds
@@ -14,20 +15,22 @@ public class Adder
 	 * @param Q
 	 * @param d
 	 * @param e */
-	public Adder(int active, int spares, double baseLambda, double lambdaSeconds, double Q,
+	public Adder(int active, int spares, double baseLambda, double lambdaSeconds, int Q,
 		double Qseconds)
 	{
 		cores = new AdderCore[active + spares];
 		for (int i = 0; i < cores.length; i++)
 			cores[i] = new AdderCore(baseLambda);
-		this.timeStep = pickStep(Q, baseLambda);
+		this.timeStep = pickStep(Q, Qseconds, 1.0 / baseLambda, lambdaSeconds);
 		minimumCores = active;
 	}
 
-	private double pickStep(double q, double baseLambda)
+	private double pickStep(int clockPeriod, double secondsPerPeriod, double meanLambda,
+		double secondsPerLambda)
 	{
-		// TODO Auto-generated method stub
-		return 0;
+		double mean = meanLambda * Math.pow(10.0, -1) / 2.0;
+		// System.out.println(mean);
+		return mean;
 	}
 
 	public boolean hasFailed()
@@ -75,13 +78,14 @@ public class Adder
 		}
 		if (remaining < minimumCores)
 			failed = true;
+		else
+			elapsedTime += timeStep;
 		return failed;
 	}
 
 	public double getTimeOfDeath()
 	{
-		// TODO Auto-generated method stub
-		return 0;
+		return elapsedTime;
 	}
 
 }

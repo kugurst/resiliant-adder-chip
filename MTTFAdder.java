@@ -12,7 +12,7 @@ public class MTTFAdder
 		final int spares = 31;
 		final int active = 1;
 		final double lambda = 0.05; // 1 / lambda = 20 days
-		final double Q = 1; // ns
+		final int Q = 1; // ns
 		Thread workers[] = new Thread[cores];
 		final AtomicInteger workerNum = new AtomicInteger(0);
 		for (int j = 0; j < workers.length; j++) {
