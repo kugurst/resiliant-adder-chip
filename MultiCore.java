@@ -39,23 +39,25 @@ public class MultiCore implements Chip
 		boolean wasActivated[] = new boolean[cores.length];
 		for (int i = 0; i < cores.length; i++) {
 			cores[i].update(t);
-			if (!cores[i].justFailed(t)) {
-				remaining++;
-				// We should activate if we need to
-				if (activateCount > 0 && !cores[i].isActive()) {
-					cores[i].activate();
-					activateCount--;
-				}
-				// Deactivate this core and attempt to activate the next one
-				else if (cores[i].isActive()) {
-					wasActivated[i] = true;
-					cores[i].rest();
+			if (cores[i].hasNotFailed()) {
+				if (!cores[i].justFailed(t)) {
+					remaining++;
+					// We should activate if we need to
+					if (activateCount > 0 && !cores[i].isActive()) {
+						cores[i].activate();
+						activateCount--;
+					}
+					// Deactivate this core and attempt to activate the next one
+					else if (cores[i].isActive()) {
+						wasActivated[i] = true;
+						cores[i].rest();
+						activateCount++;
+					}
+				} else {
+					// Attempt to activate the next one, as this one failed
 					activateCount++;
+					continue;
 				}
-			} else {
-				// Attempt to activate the next one, as this one failed
-				activateCount++;
-				continue;
 			}
 		}
 		// Do one more pass to activate until we have an active number of cores

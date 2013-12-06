@@ -7,12 +7,12 @@ public class MTTFCores
 	public MTTFCores(final int type)
 	{
 		int cores = Runtime.getRuntime().availableProcessors();
-		final int simulCount = (int) Math.round(10000 / (double) cores);
+		final int simulCount = (int) Math.round(1000 / (double) cores);
 		final double timeArr[][] = new double[cores][simulCount];
 		final double timeSum[] = new double[cores];
-		final int spares = 31;
-		final int active = 1;
-		final double resolution = 1;
+		final int spares = 14;
+		final int active = 7;
+		final double resolution = 2;
 		Thread workers[] = new Thread[cores];
 		final AtomicInteger workerNum = new AtomicInteger(0);
 		for (int j = 0; j < workers.length; j++) {

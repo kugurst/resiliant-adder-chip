@@ -1,11 +1,20 @@
 public class AdderCore
 {
-	private boolean	resting;
-	private boolean	failed;
+	public static final int	ACTIVE	= 1;
+	public static final int	RESTING	= 2;
+
+	private boolean			resting	= true;
+	private boolean			failed	= false;
+	private double			baseLambda;
+	private double			currentLambda;
+
+	private int				lastState;
 
 	public AdderCore(double baseLamdba)
 	{
-		// TODO Auto-generated constructor stub
+		this.baseLambda = baseLamdba;
+		this.currentLambda = baseLamdba;
+		lastState = RESTING;
 	}
 
 	public void update(double t)
@@ -28,25 +37,27 @@ public class AdderCore
 
 	public boolean isActive()
 	{
-		// TODO Auto-generated method stub
-		return false;
+		if (failed)
+			return false;
+		return !resting;
 	}
 
 	public boolean hasNotFailed()
 	{
-		// TODO Auto-generated method stub
-		return false;
+		return failed;
 	}
 
 	public boolean justFailed(double t, int p)
 	{
-		// TODO Auto-generated method stub
+		if (failed)
+			return true;
 		return false;
 	}
 
 	public boolean shouldDeactivate()
 	{
-		// TODO Auto-generated method stub
+		if (currentLambda > 3.0 * baseLambda)
+			return true;
 		return false;
 	}
 
