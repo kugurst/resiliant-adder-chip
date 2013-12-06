@@ -19,8 +19,12 @@ public class Adder
 		double Qseconds)
 	{
 		cores = new AdderCore[active + spares];
-		for (int i = 0; i < cores.length; i++)
+		int activated = 0;
+		for (int i = 0; i < cores.length; i++) {
 			cores[i] = new AdderCore(baseLambda);
+			if (activated++ < active)
+				cores[i].activate();
+		}
 		this.timeStep = pickStep(Q, Qseconds, 1.0 / baseLambda, lambdaSeconds);
 		minimumCores = active;
 	}
@@ -33,18 +37,17 @@ public class Adder
 		return mean;
 	}
 
-	public boolean hasFailed()
+	public boolean hasFailed(int P)
 	{
 		if (failed)
 			return failed;
-		int P = 1;
 		int remaining = 0;
 		int activateCount = 0;
-		boolean wasActivated[] = new boolean[cores.length];
+		boolean wasActivate[] = new boolean[cores.length];
 		for (int i = 0; i < cores.length; i++) {
 			if (cores[i].hasNotFailed()) {
-				if (!cores[i].justFailed(timeStep, P)) {
-					cores[i].update(timeStep);
+				if (!cores[i].justFailed(timeStep)) {
+					cores[i].update(timeStep, P);
 					remaining++;
 					// We should activate if we need to
 					if (activateCount > 0 && !cores[i].isActive()) {
@@ -53,7 +56,7 @@ public class Adder
 					}
 					// Deactivate this core and attempt to activate the next one
 					else if (cores[i].isActive() && cores[i].shouldDeactivate()) {
-						wasActivated[i] = true;
+						wasActivate[i] = true;
 						cores[i].rest();
 						activateCount++;
 					}
@@ -66,7 +69,7 @@ public class Adder
 		}
 		// Do one more pass to activate until we have an active number of cores
 		for (int i = cores.length - 1; i >= 0 && activateCount > 0; i--) {
-			if (cores[i].hasNotFailed() && !cores[i].isActive() && !wasActivated[i]) {
+			if (cores[i].hasNotFailed() && !cores[i].isActive() && !wasActivate[i]) {
 				cores[i].activate();
 				activateCount--;
 			}
@@ -80,8 +83,7 @@ public class Adder
 		}
 		if (remaining < minimumCores)
 			failed = true;
-		else
-			elapsedTime += timeStep;
+		elapsedTime += timeStep;
 		return failed;
 	}
 

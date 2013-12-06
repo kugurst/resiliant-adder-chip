@@ -3,16 +3,16 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class MTTFAdder
 {
 
-	public MTTFAdder()
+	public MTTFAdder(final int P)
 	{
 		int cores = Runtime.getRuntime().availableProcessors();
-		final int simulCount = (int) Math.round(10000 / (double) cores);
+		final int simulCount = (int) Math.round(128 / (double) cores);
 		final double timeArr[][] = new double[cores][simulCount];
 		final double timeSum[] = new double[cores];
-		final int spares = 31;
+		final int spares = 3;
 		final int active = 1;
 		final double lambda = 0.05; // 1 / lambda = 20 days
-		final int Q = 1; // ns
+		final int Q = 10; // ns
 		Thread workers[] = new Thread[cores];
 		final AtomicInteger workerNum = new AtomicInteger(0);
 		for (int j = 0; j < workers.length; j++) {
@@ -24,7 +24,7 @@ public class MTTFAdder
 					for (int i = 0; i < simulCount; i++) {
 						Adder a =
 							new Adder(active, spares, lambda, 86400.0, Q, Math.pow(10.0, -9.0));
-						while (!a.hasFailed());
+						while (!a.hasFailed(P));
 						timeArr[worker][i] = a.getTimeOfDeath();
 					}
 					for (double time : timeArr[worker])
@@ -48,7 +48,8 @@ public class MTTFAdder
 	public static void main(String[] args)
 	{
 		long start = System.currentTimeMillis();
-		new MTTFAdder();
+		for (int i = 1; i < 4; i++)
+			new MTTFAdder(i);
 		System.out.println("Time taken: "
 			+ ((System.currentTimeMillis() - start) / Math.pow(10.0, 3)) + "s");
 	}
