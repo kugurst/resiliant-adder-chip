@@ -1,18 +1,23 @@
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class MTTFAdder
 {
+	public static StringBuilder	stats	= new StringBuilder();
 
 	public MTTFAdder(final int P)
 	{
 		int cores = Runtime.getRuntime().availableProcessors();
-		final int simulCount = (int) Math.round(1000 / (double) cores);
+		final int simulCount = (int) Math.round(8 / (double) cores);
 		final double timeArr[][] = new double[cores][simulCount];
 		final double timeSum[] = new double[cores];
-		final int spares = 16;
-		final int active = 1;
-		final double lambda = 0.005; // 1 / lambda = 20 days
+		final int spares = 4;
+		final int active = 4;
+		final double lambda = 0.05; // 1 / lambda = 20 days
 		final int Q = 10; // ns
+		final AtomicBoolean added = new AtomicBoolean(false);
+		if (P == 1)
+			stats.append(lambda + "\t" + spares + "\t" + active + "\t");
 		Thread workers[] = new Thread[cores];
 		final AtomicInteger workerNum = new AtomicInteger(0);
 		for (int j = 0; j < workers.length; j++) {
@@ -24,6 +29,8 @@ public class MTTFAdder
 					for (int i = 0; i < simulCount; i++) {
 						Adder a =
 							new Adder(active, spares, lambda, 86400.0, Q, Math.pow(10.0, -9.0));
+						if (!added.getAndSet(true))
+							stats.append(a.timeStep);
 						while (!a.hasFailed(P));
 						timeArr[worker][i] = a.getTimeOfDeath();
 					}
@@ -43,6 +50,7 @@ public class MTTFAdder
 		for (double timeTotal : timeSum)
 			totalSum += timeTotal;
 		System.out.println("Average time: " + (totalSum / (cores * simulCount)));
+		stats.append("\t" + (totalSum / (cores * simulCount)));
 	}
 
 	public static void main(String[] args)
@@ -50,6 +58,7 @@ public class MTTFAdder
 		long start = System.currentTimeMillis();
 		for (int i = 1; i < 4; i++)
 			new MTTFAdder(i);
+		System.out.println(stats);
 		System.out.println("Time taken: "
 			+ ((System.currentTimeMillis() - start) / Math.pow(10.0, 3)) + "s");
 	}

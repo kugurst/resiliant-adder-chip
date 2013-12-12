@@ -1,7 +1,7 @@
 public class Adder
 {
 	private AdderCore[]	cores;
-	private double		timeStep;
+	double				timeStep;
 	private boolean		failed;
 	private int			minimumCores;
 	private double		elapsedTime;
@@ -21,9 +21,11 @@ public class Adder
 		cores = new AdderCore[active + spares];
 		int activated = 0;
 		for (int i = 0; i < cores.length; i++) {
-			cores[i] = new AdderCore(baseLambda);
-			if (activated++ < active)
+			cores[i] = new AdderCore(baseLambda / lambdaSeconds);
+			if (activated++ < active) {
 				cores[i].activate();
+				cores[i].update(0, 1);
+			}
 		}
 		timeStep = pickStep(Q, Qseconds, 1.0 / baseLambda, lambdaSeconds);
 		minimumCores = active;
@@ -32,7 +34,7 @@ public class Adder
 	private double pickStep(int clockPeriod, double secondsPerPeriod, double meanLambda,
 		double secondsPerLambda)
 	{
-		double mean = 0.001;// meanLambda * Math.pow(10.0, -1) / 2.0;
+		double mean = 0.01;// meanLambda * Math.pow(10.0, -1) / 2.0;
 		// System.out.println(mean);
 		return mean;
 	}
@@ -46,8 +48,8 @@ public class Adder
 		boolean wasActivate[] = new boolean[cores.length];
 		for (int i = 0; i < cores.length; i++) {
 			if (cores[i].hasNotFailed()) {
-				cores[i].update(timeStep, P);
 				if (!cores[i].justFailed(timeStep)) {
+					cores[i].update(timeStep, P);
 					remaining++;
 					// We should activate if we need to
 					if (activateCount > 0 && !cores[i].isActive()) {
