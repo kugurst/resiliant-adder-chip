@@ -13,12 +13,14 @@ public class AdderCore
 
 	private int				lastState					= RESTING;
 	private int				nextState;
+	private double			activeLambda;
 
 	public AdderCore(double baseLambda)
 	{
 		this.baseLambda = baseLambda;
 		this.currentLambda = baseLambda;
 		this.relaxLambda = baseLambda;
+		this.activeLambda = baseLambda;
 	}
 
 	public void update(double t, int p)
@@ -30,11 +32,13 @@ public class AdderCore
 			currentLambda =
 				Math.max(baseLambda, relaxLambda * Math.exp(-k * elapsedTimeInCurrentState));
 		else if (lastState == ACTIVE)
-			currentLambda = baseLambda + p * Math.sqrt(elapsedTimeInCurrentState);
+			currentLambda = activeLambda + p * Math.sqrt(elapsedTimeInCurrentState);
 		if (nextState != lastState) {
 			elapsedTimeInCurrentState = 0;
 			if (nextState == RESTING)
 				relaxLambda = currentLambda;
+			else
+				activeLambda = relaxLambda;
 			lastState = nextState;
 		}
 	}
