@@ -8,7 +8,7 @@ double global_timeStep;
 adder::adder(int active, int spares, double baseLambda, double lambdaSeconds,
     int Q, double Qseconds)
 {
-    initLambda = baseLambda / lambdaSeconds;
+    initLambda = baseLambda;
     numCores = active + spares;
     cores = new adder_core[numCores];
     int activated = 0;
@@ -84,7 +84,7 @@ double adder::getTimeOfDeath()
 double pickStep(int clockPeriod, double secondsPerPeriod, double meanLambda,
     double secondsPerLambda)
 {
-    double mean = 0.1;
+    double mean = (1 / secondsPerLambda + secondsPerPeriod) / 2;
     return mean;
 }
 

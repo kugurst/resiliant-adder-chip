@@ -3,7 +3,7 @@
 #include <cmath>
 #include <cstdlib>
 
-#define K 128
+#define K 64
 
 adder_core::adder_core(double bLambda)
 {

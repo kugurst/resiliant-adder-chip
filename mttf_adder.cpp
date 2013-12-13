@@ -48,6 +48,7 @@ void *mttf_worker(void *args_void)
         if (added++ == 0)
             stats << '\t' << global_timeStep;
         while (!a.hasFailed(args->P));
+        srand(time(NULL));
         timeArr[i] = a.getTimeOfDeath();
     }
     for (int i = 0; i < args->simul_count; i++)
@@ -57,16 +58,15 @@ void *mttf_worker(void *args_void)
 
 void mttf(int P)
 {
-    srand(time(NULL));
     worker_num = 0;
     long cores = sysconf(_SC_NPROCESSORS_ONLN);
-    long int simul_count = lround(8 / cores);
+    long int simul_count = lround(80 / cores);
     volatile double timeSum[cores];
     for (int i = 0; i < cores; i++)
         timeSum[i] = 0;
     adder_args_t args;
-    args.spares = 4;
-    args.active = 4;
+    args.spares = 1;
+    args.active = 1;
     args.lambda = 0.05;
     args.Q = 10;
     args.Qseconds = pow(10, -9);

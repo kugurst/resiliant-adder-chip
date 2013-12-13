@@ -21,7 +21,7 @@ public class Adder
 		cores = new AdderCore[active + spares];
 		int activated = 0;
 		for (int i = 0; i < cores.length; i++) {
-			cores[i] = new AdderCore(baseLambda / lambdaSeconds);
+			cores[i] = new AdderCore(baseLambda);
 			if (activated++ < active) {
 				cores[i].activate();
 				cores[i].update(0, 1);
@@ -34,7 +34,7 @@ public class Adder
 	private double pickStep(int clockPeriod, double secondsPerPeriod, double meanLambda,
 		double secondsPerLambda)
 	{
-		double mean = 0.1;// meanLambda * Math.pow(10.0, -1) / 2.0;
+		double mean = (1 / secondsPerLambda + secondsPerPeriod) * 10 / 2.0;
 		// System.out.println(mean);
 		return mean;
 	}

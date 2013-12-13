@@ -9,7 +9,7 @@ public class AdderCore
 	private double			currentLambda;
 	private double			relaxLambda;
 	private double			elapsedTimeInCurrentState	= 0;
-	private double			k							= 128;
+	static double			k							= 64;
 
 	private int				lastState					= RESTING;
 	private int				nextState;

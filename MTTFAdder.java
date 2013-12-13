@@ -4,14 +4,12 @@ public class MTTFAdder
 {
 	public static StringBuilder	stats	= new StringBuilder();
 
-	public MTTFAdder(final int P)
+	public MTTFAdder(final int P, final int spares, final int active)
 	{
 		int cores = Runtime.getRuntime().availableProcessors();
-		final int simulCount = (int) Math.round(8 / (double) cores);
+		final int simulCount = (int) Math.round(80 / (double) cores);
 		final double timeArr[][] = new double[cores][simulCount];
 		final double timeSum[] = new double[cores];
-		final int spares = 4;
-		final int active = 4;
 		final double lambda = 0.05; // 1 / lambda = 20 days
 		final int Q = 10; // ns
 		if (P == 1)
@@ -27,8 +25,8 @@ public class MTTFAdder
 					for (int i = 0; i < simulCount; i++) {
 						Adder a =
 							new Adder(active, spares, lambda, 86400.0, Q, Math.pow(10.0, -9.0));
-						if (P == 1 && worker == 0)
-							stats.append(a.timeStep);
+						if (i == 0 && P == 1 && worker == 0)
+							stats.append(a.timeStep + "\t" + AdderCore.k);
 						while (!a.hasFailed(P));
 						timeArr[worker][i] = a.getTimeOfDeath();
 					}
@@ -47,7 +45,6 @@ public class MTTFAdder
 		double totalSum = 0;
 		for (double timeTotal : timeSum)
 			totalSum += timeTotal;
-		System.out.println(P);
 		System.out.println("Average time: " + (totalSum / (cores * simulCount)));
 		stats.append("\t" + (totalSum / (cores * simulCount)));
 	}
@@ -55,8 +52,10 @@ public class MTTFAdder
 	public static void main(String[] args)
 	{
 		long start = System.currentTimeMillis();
+		AdderCore.k = args.length > 2 ? Integer.parseInt(args[2]) : AdderCore.k;
 		for (int i = 1; i < 4; i++)
-			new MTTFAdder(i);
+			new MTTFAdder(i, args.length > 0 ? Integer.parseInt(args[0]) : 0, args.length > 1
+				? Integer.parseInt(args[1]) : 1);
 		System.out.println(stats);
 		System.out.println("Time taken: "
 			+ ((System.currentTimeMillis() - start) / Math.pow(10.0, 3)) + "s");
