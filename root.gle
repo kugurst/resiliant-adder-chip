@@ -1,0 +1,19 @@
+size 11 8
+
+set texlabels 1
+begin graph
+    scale auto
+    title "Relaxation Characteristic"
+    xtitle "$t$"
+    ytitle "$max(\lambda_0, \lambda_r e^{-K t})$"
+    key pos tr hei 0.005 nobox
+    I = 1
+    H = 1
+    L = 0.05
+    for K = 1 to 64 step K
+        let d[I] = max(L, 10*L*exp(-K*x)) from 0 to 2
+        d[I] line color rgb(H/7,1-H/7,0) key "$K = "+num$(K)+", \lambda = "+num$(L)+"$"
+        I = I + 1
+        H = H + 1
+    next K
+end graph

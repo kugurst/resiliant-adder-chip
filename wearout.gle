@@ -1,0 +1,22 @@
+size 11 8
+
+set texlabels 1
+begin graph
+    scale auto
+    title "Wearout Characteristic"
+    xtitle "$t$"
+    ytitle "$\lambda_0+P \sqrt{t}$"
+    key pos tr hei 0.005 nobox
+    I = 1
+    H = 1
+    for P = 1 to 3
+        J = 1
+        for L = 0.00005 to 0.5 step L*9
+            let d[I] = L+P*sqrt(x) from 0 to 2
+            d[I] line color rgb(1-H/3,1-J/4,0) key "$P = "+num$(P)+", \lambda = "+num$(L)+"$"
+            I = I + 1
+            J = J + 1
+        next L
+        H = H + 1
+    next P
+end graph
