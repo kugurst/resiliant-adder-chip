@@ -1,4 +1,3 @@
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class MTTFAdder
@@ -15,7 +14,6 @@ public class MTTFAdder
 		final int active = 4;
 		final double lambda = 0.05; // 1 / lambda = 20 days
 		final int Q = 10; // ns
-		final AtomicBoolean added = new AtomicBoolean(false);
 		if (P == 1)
 			stats.append(lambda + "\t" + spares + "\t" + active + "\t");
 		Thread workers[] = new Thread[cores];
@@ -29,7 +27,7 @@ public class MTTFAdder
 					for (int i = 0; i < simulCount; i++) {
 						Adder a =
 							new Adder(active, spares, lambda, 86400.0, Q, Math.pow(10.0, -9.0));
-						if (!added.getAndSet(true))
+						if (P == 1 && worker == 0)
 							stats.append(a.timeStep);
 						while (!a.hasFailed(P));
 						timeArr[worker][i] = a.getTimeOfDeath();
@@ -49,6 +47,7 @@ public class MTTFAdder
 		double totalSum = 0;
 		for (double timeTotal : timeSum)
 			totalSum += timeTotal;
+		System.out.println(P);
 		System.out.println("Average time: " + (totalSum / (cores * simulCount)));
 		stats.append("\t" + (totalSum / (cores * simulCount)));
 	}

@@ -34,7 +34,7 @@ public class Adder
 	private double pickStep(int clockPeriod, double secondsPerPeriod, double meanLambda,
 		double secondsPerLambda)
 	{
-		double mean = 0.01;// meanLambda * Math.pow(10.0, -1) / 2.0;
+		double mean = 0.1;// meanLambda * Math.pow(10.0, -1) / 2.0;
 		// System.out.println(mean);
 		return mean;
 	}

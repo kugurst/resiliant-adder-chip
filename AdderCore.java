@@ -9,7 +9,7 @@ public class AdderCore
 	private double			currentLambda;
 	private double			relaxLambda;
 	private double			elapsedTimeInCurrentState	= 0;
-	private double			k							= 1024;
+	private double			k							= 128;
 
 	private int				lastState					= RESTING;
 	private int				nextState;
@@ -31,7 +31,6 @@ public class AdderCore
 				Math.max(baseLambda, relaxLambda * Math.exp(-k * elapsedTimeInCurrentState));
 		else if (lastState == ACTIVE)
 			currentLambda = baseLambda + p * Math.sqrt(elapsedTimeInCurrentState);
-		// System.out.println(currentLambda);
 		if (nextState != lastState) {
 			elapsedTimeInCurrentState = 0;
 			if (nextState == RESTING)
