@@ -1,14 +1,15 @@
 #!/bin/bash
 
-spareArr=( 1 2 4 8 )
-kArr=( 16 64 256 )
-# activeArr=( 4 16 64 256 )
+spareArr=( 0 1 2 4 8 16 )
+kArr=( 64 128 256 512 1024 )
+activeArr=( 4 16 64 256 )
 
-active=$1
-rm results-$active.txt
+echo "------------------------------------------------------------------------" >> results.txt
 
-for spare in "${spareArr[@]}"; do
-    for k in "${kArr[@]}"; do
-        java MTTFAdder "$((spare * active))" "$active" "$k" >> results-$active.txt
+for k in "${kArr[@]}"; do
+    for active in "${activeArr[@]}"; do
+        for spare in "${spareArr[@]}"; do
+            java MTTFAdder "$((spare * active))" "$active" "$k" >> results.txt
+        done
     done
 done

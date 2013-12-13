@@ -45,7 +45,7 @@ public class MTTFAdder
 		double totalSum = 0;
 		for (double timeTotal : timeSum)
 			totalSum += timeTotal;
-		System.out.println("Average time: " + (totalSum / (cores * simulCount)));
+		// System.out.println("Average time: " + (totalSum / (cores * simulCount)));
 		stats.append("\t" + (totalSum / (cores * simulCount)));
 	}
 
@@ -53,11 +53,12 @@ public class MTTFAdder
 	{
 		long start = System.currentTimeMillis();
 		AdderCore.k = args.length > 2 ? Integer.parseInt(args[2]) : AdderCore.k;
+		// spares, active, k
 		for (int i = 1; i < 4; i++)
 			new MTTFAdder(i, args.length > 0 ? Integer.parseInt(args[0]) : 0, args.length > 1
 				? Integer.parseInt(args[1]) : 1);
 		System.out.println(stats);
-		System.out.println("Time taken: "
-			+ ((System.currentTimeMillis() - start) / Math.pow(10.0, 3)) + "s");
+		// System.out.println("Time taken: "
+		// + ((System.currentTimeMillis() - start) / Math.pow(10.0, 3)) + "s");
 	}
 }

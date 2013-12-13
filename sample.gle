@@ -1,0 +1,30 @@
+size 11 8
+
+set texlabels 1
+begin graph
+    scale auto
+    title "$\lambda$ Response"
+    xtitle "$t$"
+    ytitle "$\lambda$"
+    key pos tr hei 0.1
+    I = 1
+    H = 1
+    L = 0.05
+    for K = 1 to 64 step K
+        for P = 1 to 3
+            let d[4*I+1] = L+P*sqrt(x) from 0 to 0.5
+            d[4*I+1] line color rgb(1-P/3,1-H/7,0)
+            LA = P*sqrt(0.5)+L
+            let d[4*I+2] = max(L, LA*exp(-K*(x-0.5))) from 0.5 to 1
+            d[4*I+2] line color rgb(1-P/3,1-H/7,0)
+            LR = max(L, LA*exp(-K*(0.5)))
+            let d[4*I+3] = LR+P*sqrt(x-1) from 1 to 1.5
+            d[4*I+3] line color rgb(1-P/3,1-H/7,0)
+            LAA = P*sqrt(0.5)+LR
+            let d[4*I+4] = max(L, LAA*exp(-K*(x-1.5))) from 1.5 to 2
+            d[4*I+4] line color rgb(1-P/3,1-H/7,0) key "$K = "+num$(K)+", P = "+num$(P)+"$"
+            I = I + 1
+        next P
+        H = H + 1
+    next K
+end graph
